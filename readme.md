@@ -1,8 +1,8 @@
-# (リポジトリ名)
-* XXX です。
+# notify-slack-of-web-meeting
+* 当日の Web 会議の情報を Slack に通知するWeb サービスです。
 
 ## 概要
-### DensoCreate.XXXの特徴
+### Notify Slack of web meeting の特徴
 （ここにライブラリ開発の背景や、ライブラリが提供するフィーチャー、価値を記載する）
 * ...
 * ...

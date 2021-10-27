@@ -49,8 +49,18 @@ namespace dcinc.api
                     {
                         return new BadRequestObjectResult("startDateTime is invalid. Please specify the date and time after tomorrow.");
                     }
+                    string url = data?.url;
+                    url = string.IsNullOrEmpty(url) ? string.Empty : data?.url;
+                    string registeredAt = data?.registeredAt;
+                    registeredAt = string.IsNullOrEmpty(registeredAt) ? string.Empty : data?.registeredAt;
+                    string slackChannelId = data?.slackChannelId;
+                    // SlackチャンネルIDが未指定の場合は無効な値とする。
+                    if(string.IsNullOrEmpty(slackChannelId))
+                    {
+                        return new BadRequestObjectResult("slackChannelId is null or empty");
+                    }
                     // Web会議情報を登録
-                    message = await AddWebMeetings(documentsOut, name, startDateTime.Value);
+                    message = await AddWebMeetings(documentsOut, name, startDateTime.Value, url, registeredAt, slackChannelId);
     
                     break;
                 default:
@@ -63,7 +73,11 @@ namespace dcinc.api
         private static async Task<string> AddWebMeetings(
                     IAsyncCollector<dynamic> documentsOut,
                     string name,
-                    DateTime startDateTime /* 他の引数は未実装*/) {
+                    DateTime startDateTime,
+                    string url,
+                    string registeredAt,
+                    string slackChannelId
+                    ) {
             // Add a JSON document to the output container.
             var documentItem = new
             {
@@ -71,7 +85,10 @@ namespace dcinc.api
                 id = System.Guid.NewGuid().ToString(),
                 name = name,
                 date = startDateTime.Date.ToString("yyyy-MM-dd"),
-                startDateTime = $"{startDateTime:O}"
+                startDateTime = $"{startDateTime:O}",
+                url = url,
+                registeredAt = registeredAt,
+                slackChannelId = slackChannelId
             };
             await documentsOut.AddAsync(documentItem);
             return JsonConvert.SerializeObject(documentItem);

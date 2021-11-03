@@ -7,6 +7,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using dcinc.api.entities;
+using FluentValidation;
 
 namespace dcinc.api
 {
@@ -25,46 +27,43 @@ namespace dcinc.api
             log.LogInformation("C# HTTP trigger function processed a request.");
             string message = string.Empty;
 
-            // メソッドにより取得処理と登録処理を切り替える。
-            switch (req.Method)
-            {
-                case "GET":
-                    log.LogInformation("GET webMeetings");
-                    break;
-                case "POST":
-                    log.LogInformation("POST webMeetings");
+            try {
 
-                    // リクエストのBODYからパラメータ取得
-                    string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                    dynamic data = JsonConvert.DeserializeObject(requestBody);
-                    string name = data?.name;
-                    // 会議名が未指定の場合は無効な値とする。
-                    if(string.IsNullOrEmpty(name))
-                    {
-                        return new BadRequestObjectResult("name is null or empty");
-                    }
-                    DateTime? startDateTime = data?.startDateTime;
-                    // 日付が未指定もしくは今日以前の場合は無効な値とする。
-                    if(!startDateTime.HasValue || startDateTime <= DateTime.Today)
-                    {
-                        return new BadRequestObjectResult("startDateTime is invalid. Please specify the date and time after tomorrow.");
-                    }
-                    string url = data?.url;
-                    url = string.IsNullOrEmpty(url) ? string.Empty : data?.url;
-                    string registeredAt = data?.registeredAt;
-                    registeredAt = string.IsNullOrEmpty(registeredAt) ? string.Empty : data?.registeredAt;
-                    string slackChannelId = data?.slackChannelId;
-                    // SlackチャンネルIDが未指定の場合は無効な値とする。
-                    if(string.IsNullOrEmpty(slackChannelId))
-                    {
-                        return new BadRequestObjectResult("slackChannelId is null or empty");
-                    }
-                    // Web会議情報を登録
-                    message = await AddWebMeetings(documentsOut, name, startDateTime.Value, url, registeredAt, slackChannelId);
-    
-                    break;
-                default:
-                    throw new InvalidOperationException($"Invalid method: method={req.Method}");
+                // メソッドにより取得処理と登録処理を切り替える。
+                switch (req.Method)
+                {
+                    case "GET":
+                        log.LogInformation("GET webMeetings");
+                        break;
+                    case "POST":
+                        log.LogInformation("POST webMeetings");
+
+                        // リクエストのBODYからパラメータ取得
+                        string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                        dynamic data = JsonConvert.DeserializeObject(requestBody);
+
+                        // エンティティに設定
+                        WebMeeting webMeeting = new WebMeeting();
+                        webMeeting.Name = data?.name;
+                        webMeeting.StartDateTime = data?.startDateTime ?? DateTime.MinValue;
+                        webMeeting.Url = data?.url;
+                        webMeeting.RegisteredBy = data?.registeredBy;
+                        webMeeting.SlackChannelId = data?.slackChannelId;
+
+                        // 入力値チェックを行う
+                        WebMeetingValidator validator = new WebMeetingValidator();
+                        validator.ValidateAndThrow(webMeeting);
+
+                        // Web会議情報を登録
+                        message = await AddWebMeetings(documentsOut, webMeeting);
+        
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Invalid method: method={req.Method}");
+                }
+            }
+            catch(Exception ex) {
+                return new BadRequestObjectResult(ex.Message);
             }
 
             return new OkObjectResult($"This HTTP triggered function executed successfully.\n{message}");
@@ -72,26 +71,13 @@ namespace dcinc.api
 
         private static async Task<string> AddWebMeetings(
                     IAsyncCollector<dynamic> documentsOut,
-                    string name,
-                    DateTime startDateTime,
-                    string url,
-                    string registeredAt,
-                    string slackChannelId
+                    WebMeeting webMeeting
                     ) {
+            // 登録日時にUTCでの現在日時を設定
+            webMeeting.RegisteredAt = DateTime.UtcNow;
             // Add a JSON document to the output container.
-            var documentItem = new
-            {
-                // create a random ID
-                id = System.Guid.NewGuid().ToString(),
-                name = name,
-                date = startDateTime.Date.ToString("yyyy-MM-dd"),
-                startDateTime = $"{startDateTime:O}",
-                url = url,
-                registeredAt = registeredAt,
-                slackChannelId = slackChannelId
-            };
-            await documentsOut.AddAsync(documentItem);
-            return JsonConvert.SerializeObject(documentItem);
+            await documentsOut.AddAsync(webMeeting);
+            return JsonConvert.SerializeObject(webMeeting);
         }
     }
 }

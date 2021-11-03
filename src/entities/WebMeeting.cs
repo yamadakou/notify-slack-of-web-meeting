@@ -30,7 +30,7 @@ namespace dcinc.api.entities
         /// <summary>
         /// Web会議の日付
         /// </summary>
-        public DateTime Date => StartDateTime.Date;
+        public string Date => StartDateTime.Date.ToString("yyyy-MM-dd");
         /// <summary>
         /// Web会議のURL
         /// </summary>

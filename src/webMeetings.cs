@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using dcinc.api.entities;
 using FluentValidation;
-
+using Newtonsoft.Json.Serialization;
 namespace dcinc.api
 {
     public static class webMeetings
@@ -76,8 +76,9 @@ namespace dcinc.api
             // 登録日時にUTCでの現在日時を設定
             webMeeting.RegisteredAt = DateTime.UtcNow;
             // Add a JSON document to the output container.
-            await documentsOut.AddAsync(webMeeting);
-            return JsonConvert.SerializeObject(webMeeting);
+            string documentItem = JsonConvert.SerializeObject(webMeeting, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            await documentsOut.AddAsync(documentItem);
+            return documentItem;
         }
     }
 }

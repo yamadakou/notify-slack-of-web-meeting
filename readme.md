@@ -1,4 +1,7 @@
 # notify-slack-of-web-meeting
+
+[![Build](https://github.com/yamadakou/notify-slack-of-web-meeting/actions/workflows/build.yml/badge.svg)](https://github.com/yamadakou/notify-slack-of-web-meeting/workflows/build.yml)
+
 * 当日の Web 会議の情報を Slack に通知するWeb サービスです。
 
 ## 概要

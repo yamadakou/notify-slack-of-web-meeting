@@ -27,9 +27,6 @@ jobs:
       with:
         dotnet-version: 3.1.x
 
-    - name: Add Source
-      run: dotnet nuget add source "https://nuget.pkg.github.com/miles-team/index.json" -n github -u ${{ secrets.NUGET_GITHUB_USER }} -p ${{ secrets.NUGET_GITHUB_TOKEN }} --store-password-in-clear-text
-
     - name: Restore dependencies
       run: dotnet restore
       working-directory: ${{env.SOURCE_FOLDER}}

@@ -12,9 +12,9 @@ using FluentValidation;
 using Newtonsoft.Json.Serialization;
 namespace dcinc.api
 {
-    public static class webMeetings
+    public static class WebMeetings
     {
-        [FunctionName("webMeetings")]
+        [FunctionName("WebMeetings")]
         
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,

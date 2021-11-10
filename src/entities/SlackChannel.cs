@@ -1,17 +1,16 @@
 using System;
-using Newtonsoft.Json;
 
 namespace dcinc.api.entities
 {
     /// <summary>
-    /// Web会議を表す
+    /// Slackチャンネルを表す
     /// </summary>
-    public class WebMeeting
+    public class SlackChannel
     {
         /// <summary>
         /// 既定のコンストラクタ
         /// </summary>
-            public WebMeeting()
+            public SlackChannel()
         {
             Id = Guid.NewGuid().ToString();
         }
@@ -21,22 +20,13 @@ namespace dcinc.api.entities
         /// </summary>
         public string Id { get; set; }
         /// <summary>
-        /// Web会議名
+        /// Slackチャンネル名
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Web会議の開始日時
+        /// SlackチャンネルのWebhook URL
         /// </summary>
-        public DateTime StartDateTime { get; set; }
-        /// <summary>
-        /// Web会議の日付
-        /// </summary>
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.UnixDateTimeConverter))]
-        public DateTime Date => StartDateTime.Date.ToUniversalTime();
-        /// <summary>
-        /// Web会議のURL
-        /// </summary>
-        public string Url { get; set; }
+        public string WebhookUrl { get; set; }
         /// <summary>
         /// 登録者
         /// </summary>
@@ -45,9 +35,5 @@ namespace dcinc.api.entities
         /// 登録日時（UTC）
         /// </summary>
         public DateTime RegisteredAt { get; set; }
-        /// <summary>
-        /// 通知先のSlackチャンネル
-        /// </summary>
-        public string SlackChannelId { get; set; }
     }
 }

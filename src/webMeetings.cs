@@ -45,7 +45,7 @@ namespace dcinc.api
                         // エンティティに設定
                         WebMeeting webMeeting = new WebMeeting();
                         webMeeting.Name = data?.name;
-                        webMeeting.StartDateTime = data?.startDateTime ?? DateTime.MinValue;
+                        webMeeting.StartDateTime = data?.startDateTime ?? DateTime.UnixEpoch;
                         webMeeting.Url = data?.url;
                         webMeeting.RegisteredBy = data?.registeredBy;
                         webMeeting.SlackChannelId = data?.slackChannelId;

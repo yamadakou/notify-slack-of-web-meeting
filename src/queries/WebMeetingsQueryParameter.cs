@@ -1,4 +1,7 @@
 using System;
+using System.Linq.Expressions;
+using LinqKit;
+using dcinc.api.entities;
 
 namespace dcinc.api.queries
 {
@@ -10,11 +13,50 @@ namespace dcinc.api.queries
         /// <summary>
         /// Web会議の日付範囲の開始日
         /// </summary>
-        public DateTime? FromDate { get; set; }
+        private DateTime? m_fromDate;
+
+        /// <summary>
+        /// Web会議の日付範囲の開始日（ISO8601形式の文字列）
+        /// </summary>
+        public string FromDate
+        {
+            get => m_fromDate.HasValue ? m_fromDate.Value.Date.ToString("O") : null;
+            set
+            {
+                m_fromDate = null;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    DateTime fromDate;
+                    if(DateTime.TryParse(value, out fromDate))
+                    {
+                        m_fromDate = fromDate;
+                    }
+                }; 
+            }
+        }
+
         /// <summary>
         /// Web会議の日付範囲の終了日
         /// </summary>
-        public DateTime? ToDate { get; set; }
+        private DateTime? m_toDate;
+        /// <summary>
+        /// Web会議の日付範囲の終了日（ISO8601形式の文字列）
+        /// </summary>
+        public string ToDate        {
+            get => m_toDate.HasValue ? m_toDate.Value.Date.ToString("O") : null;
+            set
+            {
+                m_toDate = null;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    DateTime toDate;
+                    if(DateTime.TryParse(value, out toDate))
+                    {
+                        m_toDate = toDate;
+                    }
+                }; 
+            }
+        }
         /// <summary>
         /// 登録者
         /// </summary>
@@ -29,7 +71,7 @@ namespace dcinc.api.queries
         /// </summary>
         public bool HasFromDate {
             get {
-                return (FromDate != null && FromDate.HasValue);
+                return (m_fromDate != null && m_fromDate.HasValue);
             }
         }
 
@@ -39,7 +81,7 @@ namespace dcinc.api.queries
         /// </summary>
         public DateTime FromDateUtcValue {
             get {
-                return HasFromDate ? FromDate.Value.Date.ToUniversalTime() : DateTime.UnixEpoch;
+                return HasFromDate ? m_fromDate.Value.Date.ToUniversalTime() : DateTime.UnixEpoch;
             }
         }
 
@@ -48,7 +90,7 @@ namespace dcinc.api.queries
         /// </summary>
         public bool HasToDate {
             get {
-                return (ToDate != null && ToDate.HasValue);
+                return (m_toDate != null && m_toDate.HasValue);
             }
         }
 
@@ -57,7 +99,7 @@ namespace dcinc.api.queries
         /// </summary>
         public DateTime ToDateUtcValue {
             get {
-                return HasToDate ? ToDate.Value.Date.ToUniversalTime().AddDays(1).AddMilliseconds(-1) : DateTime.MaxValue;
+                return HasToDate ? m_toDate.Value.Date.ToUniversalTime().AddDays(1).AddMilliseconds(-1) : DateTime.MaxValue;
             }
         }
 
@@ -77,6 +119,39 @@ namespace dcinc.api.queries
             get {
                 return !string.IsNullOrEmpty(SlackChannelId);
             }
+        }
+
+        /// <summary>
+        /// 抽出条件の式ツリーを取得する
+        /// </summary>
+        /// <returns>AND条件で結合した抽出条件の式ツリー</returns>
+        public Expression<Func<WebMeeting, bool>> GetWhereExpression()
+        {
+            // パラメータに指定された項目をAND条件で結合する。
+            Expression<Func<WebMeeting, bool>> expr = PredicateBuilder.New<WebMeeting>(true);
+            var original = expr;
+            if (this.HasRegisteredBy)
+            {
+                expr = expr.And(w => w.RegisteredBy == this.RegisteredBy);
+            }
+            if (this.HasSlackChannelId)
+            {
+                expr = expr.And(w => w.SlackChannelId == this.SlackChannelId);
+            }
+            if (this.HasFromDate)
+            {
+                expr = expr.And(w => this.FromDateUtcValue <= w.Date);
+            }
+            if (this.HasToDate)
+            {
+                expr = expr.And(w => w.Date <= this.ToDateUtcValue);
+            }
+            if (expr == original)
+            {
+                expr = x => true;
+            }
+
+            return expr;
         }
     }
 }

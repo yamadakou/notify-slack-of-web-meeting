@@ -43,10 +43,12 @@ namespace dcinc.api
                         dynamic data = JsonConvert.DeserializeObject(requestBody);
 
                         // エンティティに設定
-                        SlackChannel slackChannel = new SlackChannel();
-                        slackChannel.Name = data?.name;
-                        slackChannel.WebhookUrl = data?.webhookUrl;
-                        slackChannel.RegisteredBy = data?.registeredBy;
+                        SlackChannel slackChannel = new SlackChannel()
+                        {
+                            Name = data?.name,
+                            WebhookUrl = data?.webhookUrl,
+                            RegisteredBy = data?.registeredBy
+                        };
 
                         // 入力値チェックを行う
                         SlackChannelValidator validator = new SlackChannelValidator();

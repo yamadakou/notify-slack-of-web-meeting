@@ -131,7 +131,7 @@ namespace dcinc.api
                 queryParameterValidator.ValidateAndThrow(queryParameter);
 
                 // Web会議情報を取得
-                message = await GetWebMeetings(client, queryParameter);
+                message = await GetWebMeetings(client, queryParameter, log);
             }
             catch (Exception ex)
             {
@@ -147,10 +147,11 @@ namespace dcinc.api
         /// <param name="client">CosmosDBのドキュメントクライアント</param>
         /// <param name="queryParameter">抽出条件パラメータ</param>
         /// <returns></returns>
+        /// <param name="log">ロガー</param>
         private static async Task<string> GetWebMeetings(
                    DocumentClient client,
-                   WebMeetingsQueryParameter queryParameter
-                   )
+                   WebMeetingsQueryParameter queryParameter,
+                   ILogger log)
         {
             // Get a JSON document from the container.
             Uri collectionUri = UriFactory.CreateDocumentCollectionUri("notify-slack-of-web-meeting-db", "WebMeetings");
@@ -166,6 +167,7 @@ namespace dcinc.api
                     documentItems.Add(documentItem);
                 }
             }
+            log.LogInformation(query.ToString());
             return JsonConvert.SerializeObject(documentItems);
         }
     }

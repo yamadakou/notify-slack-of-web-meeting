@@ -18,15 +18,19 @@ using dcinc.api.queries;
 
 namespace dcinc.api
 {
+    /// <summary>
+    /// Web会議情報API
+    /// </summary>
     public static class WebMeetings
     {
+        #region Web会議情報を登録
         /// <summary>
         /// Web会議情報を登録する。
         /// </summary>
         /// <param name="req">HTTPリクエスト</param>
         /// <param name="documentsOut">CosmosDBのドキュメント</param>
         /// <param name="log">ロガー</param>
-        /// <returns></returns>
+        /// <returns>登録したWeb会議情報</returns>
         [FunctionName("AddWebMeetings")]
         public static async Task<IActionResult> AddWebMeetings(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "WebMeetings")] HttpRequest req,
@@ -78,7 +82,7 @@ namespace dcinc.api
         /// </summary>
         /// <param name="documentsOut">CosmosDBのドキュメント</param>
         /// <param name="webMeeting">Web会議情報</param>
-        /// <returns></returns>
+        /// <returns>登録したWeb会議情報</returns>
         private static async Task<string> AddWebMeetings(
                     IAsyncCollector<dynamic> documentsOut,
                     WebMeeting webMeeting
@@ -91,17 +95,18 @@ namespace dcinc.api
             await documentsOut.AddAsync(documentItem);
             return documentItem;
         }
+        #endregion
 
+        #region Web会議情報一覧を取得
         /// <summary>
         /// Web会議情報一覧を取得する。
         /// </summary>
         /// <param name="req">HTTPリクエスト</param>
         /// <param name="client">CosmosDBのドキュメントクライアント</param>
         /// <param name="log">ロガー</param>
-        /// <returns></returns>
+        /// <returns>Web会議情報一覧</returns>
         [FunctionName("GetWebMeetings")]
         public static async Task<IActionResult> GetWebMeetings(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "WebMeetings")] HttpRequest req,
             [CosmosDB(
                 databaseName: "notify-slack-of-web-meeting-db",
@@ -146,8 +151,8 @@ namespace dcinc.api
         /// </summary>
         /// <param name="client">CosmosDBのドキュメントクライアント</param>
         /// <param name="queryParameter">抽出条件パラメータ</param>
-        /// <returns></returns>
         /// <param name="log">ロガー</param>
+        /// <returns>Web会議情報一覧</returns>
         private static async Task<string> GetWebMeetings(
                    DocumentClient client,
                    WebMeetingsQueryParameter queryParameter,
@@ -170,5 +175,6 @@ namespace dcinc.api
             log.LogInformation(query.ToString());
             return JsonConvert.SerializeObject(documentItems);
         }
+        #endregion
     }
 }

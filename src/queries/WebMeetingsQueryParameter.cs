@@ -10,11 +10,15 @@ namespace dcinc.api.queries
     /// </summary>
     public class WebMeetingsQueryParameter
     {
+        #region フィールド
         /// <summary>
         /// Web会議の日付範囲の開始日
         /// </summary>
         private DateTime? m_fromDate;
 
+        #endregion
+
+        #region プロパティ
         /// <summary>
         /// Web会議の日付範囲の開始日（ISO8601形式の文字列）
         /// </summary>
@@ -120,7 +124,10 @@ namespace dcinc.api.queries
                 return !string.IsNullOrEmpty(SlackChannelId);
             }
         }
+        
+        #endregion
 
+        #region 公開サービス
         /// <summary>
         /// 抽出条件の式ツリーを取得する
         /// </summary>
@@ -153,5 +160,6 @@ namespace dcinc.api.queries
 
             return expr;
         }
+        #endregion
     }
 }

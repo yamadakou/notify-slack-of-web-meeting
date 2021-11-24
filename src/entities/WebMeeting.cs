@@ -16,6 +16,7 @@ namespace dcinc.api.entities
             Id = Guid.NewGuid().ToString();
         }
 
+        #region プロパティ
         /// <summary>
         /// 一意とするID
         /// </summary>
@@ -57,5 +58,7 @@ namespace dcinc.api.entities
         /// </summary>
         [JsonProperty("slackChannelId")]
         public string SlackChannelId { get; set; }
+
+        #endregion
     }
 }

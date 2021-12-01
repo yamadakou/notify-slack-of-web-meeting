@@ -256,7 +256,7 @@ namespace dcinc.api
                 log.LogInformation($"DELETE webMeetings/{id}");
 
                 // Web会議情報を削除
-                var documentItems = await GetWebMeetings(client, id, log);
+                var documentItems = await DeleteWebMeetingById(client, id, log);
 
                 if(!documentItems.Any())
                 {
@@ -280,7 +280,7 @@ namespace dcinc.api
         /// <param name="id">削除するWeb会議情報のID</param>
         /// <param name="log">ロガー</param>
         /// <returns>削除したWeb会議情報</returns>
-        private static async Task<IEnumerable<WebMeeting>> GetWebMeetings(
+        private static async Task<IEnumerable<WebMeeting>> DeleteWebMeetingById(
                    DocumentClient client,
                    string id,
                    ILogger log)

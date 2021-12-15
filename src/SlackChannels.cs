@@ -120,7 +120,7 @@ namespace dcinc.api
                 // クエリパラメータから検索条件パラメータを設定
                 SlackChannelsQueryParameter queryParameter = new SlackChannelsQueryParameter()
                 {
-                    Id = req.Query["id"],
+                    Ids = req.Query["ids"],
                     Name = req.Query["name"],
                     WebhookUrl = req.Query["webhookUrl"],
                     RegisteredBy = req.Query["registeredBy"]
@@ -144,7 +144,7 @@ namespace dcinc.api
         /// <param name="queryParameter">抽出条件パラメータ</param>
         /// <param name="log">ロガー</param>
         /// <returns>Slackチャンネル情報一覧</returns>
-        private static async Task<string> GetSlackChannels(
+        internal static async Task<string> GetSlackChannels(
                    DocumentClient client,
                    SlackChannelsQueryParameter queryParameter,
                    ILogger log

@@ -154,7 +154,7 @@ namespace dcinc.api
         /// <param name="queryParameter">抽出条件パラメータ</param>
         /// <param name="log">ロガー</param>
         /// <returns>Web会議情報一覧</returns>
-        private static async Task<IEnumerable<WebMeeting>> GetWebMeetings(
+        internal static async Task<IEnumerable<WebMeeting>> GetWebMeetings(
                    DocumentClient client,
                    WebMeetingsQueryParameter queryParameter,
                    ILogger log)

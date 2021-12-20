@@ -164,6 +164,7 @@ namespace dcinc.api
             IDocumentQuery<WebMeeting> query = client.CreateDocumentQuery<WebMeeting>(collectionUri, new FeedOptions { EnableCrossPartitionQuery = true, PopulateQueryMetrics = true })
                 .Where(queryParameter.GetWhereExpression())
                 .AsDocumentQuery();
+            log.LogInformation(query.ToString());
 
             var documentItems = new List<WebMeeting>();
             while (query.HasMoreResults)
@@ -173,7 +174,6 @@ namespace dcinc.api
                     documentItems.Add(documentItem);
                 }
             }
-            log.LogInformation(query.ToString());
             return documentItems;
         }
         #endregion
@@ -188,7 +188,7 @@ namespace dcinc.api
         /// <returns>Web会議情報</returns>
         [FunctionName("GetWebMeetingById")]
         public static async Task<IActionResult> GetWebMeetingById(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "WebMeetings/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "WebMeetings/{ids}")] HttpRequest req,
             [CosmosDB(
                 databaseName: "notify-slack-of-web-meeting-db",
                 collectionName: "WebMeetings",
@@ -201,13 +201,13 @@ namespace dcinc.api
 
             try
             {
-                string id = req.RouteValues["id"].ToString();
-                log.LogInformation($"GET webMeetings/{id}");
+                string ids = req.RouteValues["ids"].ToString();
+                log.LogInformation($"GET webMeetings/{ids}");
 
                 // クエリパラメータから検索条件パラメータを設定
                 WebMeetingsQueryParameter queryParameter = new WebMeetingsQueryParameter()
                 {
-                    Id = id
+                    Ids = ids
                 };
 
                 // Web会議情報を取得
@@ -215,7 +215,7 @@ namespace dcinc.api
 
                 if(!documentItems.Any())
                 {
-                    return new BadRequestObjectResult($"Target item not found. Id={id}");
+                    return new BadRequestObjectResult($"Target item not found. Id={ids}");
                 }
                 message = JsonConvert.SerializeObject(documentItems);
             }
@@ -239,7 +239,7 @@ namespace dcinc.api
         /// <returns>削除したWeb会議情報</returns>
         [FunctionName("DeleteWebMeetingById")]
         public static async Task<IActionResult> DeleteWebMeetingById(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "WebMeetings/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "WebMeetings/{ids}")] HttpRequest req,
             [CosmosDB(
                 databaseName: "notify-slack-of-web-meeting-db",
                 collectionName: "WebMeetings",
@@ -252,15 +252,15 @@ namespace dcinc.api
 
             try
             {
-                string id = req.RouteValues["id"].ToString();
-                log.LogInformation($"DELETE webMeetings/{id}");
+                string ids = req.RouteValues["ids"].ToString();
+                log.LogInformation($"DELETE webMeetings/{ids}");
 
                 // Web会議情報を削除
-                var documentItems = await DeleteWebMeetingById(client, id, log);
+                var documentItems = await DeleteWebMeetingById(client, ids, log);
 
                 if(!documentItems.Any())
                 {
-                    return new BadRequestObjectResult($"Target item not found. Id={id}");
+                    return new BadRequestObjectResult($"Target item not found. Id={ids}");
                 }
                 message = JsonConvert.SerializeObject(documentItems);
 
@@ -277,12 +277,12 @@ namespace dcinc.api
         /// Web会議情報を削除する。
         /// </summary>
         /// <param name="client">CosmosDBのドキュメントクライアント</param>
-        /// <param name="id">削除するWeb会議情報のID</param>
+        /// <param name="ids">削除するWeb会議情報のID</param>
         /// <param name="log">ロガー</param>
         /// <returns>削除したWeb会議情報</returns>
-        private static async Task<IEnumerable<WebMeeting>> DeleteWebMeetingById(
+        internal static async Task<IEnumerable<WebMeeting>> DeleteWebMeetingById(
                    DocumentClient client,
-                   string id,
+                   string ids,
                    ILogger log)
         {
             // 削除に必要なパーティションキーを取得するため、Web会議情報を取得後に削除する。
@@ -290,7 +290,7 @@ namespace dcinc.api
             // クエリパラメータに削除するWeb会議情報のIDを設定
             WebMeetingsQueryParameter queryParameter = new WebMeetingsQueryParameter()
             {
-                Id = id
+                Ids = ids
             };
 
             // Web会議情報を取得
@@ -301,7 +301,7 @@ namespace dcinc.api
                 var partitionKey = documentItem.DateUnixTimeSeconds;
                 // Web会議情報を削除
                 // Delete a JSON document from the container.
-                Uri documentUri = UriFactory.CreateDocumentUri("notify-slack-of-web-meeting-db", "WebMeetings", id);
+                Uri documentUri = UriFactory.CreateDocumentUri("notify-slack-of-web-meeting-db", "WebMeetings", documentItem.Id);
                 await client.DeleteDocumentAsync(documentUri, new RequestOptions() { PartitionKey = new PartitionKey(partitionKey) });
             }
 

@@ -127,7 +127,7 @@ namespace dcinc.api
                 };
 
                 // Slackチャンネル情報を取得
-                message = await GetSlackChannels(client, queryParameter, log);
+                message = JsonConvert.SerializeObject(await GetSlackChannels(client, queryParameter, log));
             }
             catch (Exception ex)
             {
@@ -144,7 +144,7 @@ namespace dcinc.api
         /// <param name="queryParameter">抽出条件パラメータ</param>
         /// <param name="log">ロガー</param>
         /// <returns>Slackチャンネル情報一覧</returns>
-        internal static async Task<string> GetSlackChannels(
+        internal static async Task<IEnumerable<SlackChannel>> GetSlackChannels(
                    DocumentClient client,
                    SlackChannelsQueryParameter queryParameter,
                    ILogger log
@@ -155,6 +155,7 @@ namespace dcinc.api
             IDocumentQuery<SlackChannel> query = client.CreateDocumentQuery<SlackChannel>(collectionUri, new FeedOptions { EnableCrossPartitionQuery = true, PopulateQueryMetrics = true })
                 .Where(queryParameter.GetWhereExpression())
                 .AsDocumentQuery();
+            log.LogInformation(query.ToString());
 
             var documentItems = new List<SlackChannel>();
             while (query.HasMoreResults)
@@ -164,8 +165,7 @@ namespace dcinc.api
                     documentItems.Add(documentItem);
                 }
             }
-            log.LogInformation(query.ToString());
-            return JsonConvert.SerializeObject(documentItems);
+            return documentItems;
         }
         #endregion
 

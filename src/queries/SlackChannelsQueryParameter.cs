@@ -20,7 +20,7 @@ namespace dcinc.api.queries
         /// <summary>
         /// 一意とするID一覧
         /// </summary>
-        public IEnumerable<string> IdValues { get => Ids.Split(","); }
+        public IEnumerable<string> IdValues { get => Ids.Split(",").Select(id => id.Trim()); }
         /// <summary>
         /// Slackチャンネル名
         /// </summary>

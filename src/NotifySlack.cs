@@ -83,7 +83,7 @@ namespace dcinc.jobs
                 if(response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     // 通知したWeb会議情報を削除する
-                    await WebMeetings.DeleteWebMeetingById(client, string.Join(", ", webMeetingsBySlackChannelMap[slackChannel.Id].Select(w => w.Id)), log);
+                    await WebMeetings.DeleteWebMeetingById(client, string.Join(",", webMeetingsBySlackChannelMap[slackChannel.Id].Select(w => w.Id)), log);
                 }
             }
 

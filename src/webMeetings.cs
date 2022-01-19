@@ -215,7 +215,7 @@ namespace dcinc.api
 
                 if(!documentItems.Any())
                 {
-                    return new BadRequestObjectResult($"Target item not found. Id={ids}");
+                    return new NotFoundObjectResult($"Target item not found. Id={ids}");
                 }
                 message = JsonConvert.SerializeObject(documentItems);
             }
@@ -260,7 +260,7 @@ namespace dcinc.api
 
                 if(!documentItems.Any())
                 {
-                    return new BadRequestObjectResult($"Target item not found. Id={ids}");
+                    return new NotFoundObjectResult($"Target item not found. Id={ids}");
                 }
                 message = JsonConvert.SerializeObject(documentItems);
 

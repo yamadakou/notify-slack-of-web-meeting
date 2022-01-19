@@ -116,7 +116,7 @@ namespace dcinc.api
 
             try
             {
-                log.LogInformation("GET SlackChannels");
+                log.LogInformation("GET slackChannels");
 
                 // クエリパラメータから検索条件パラメータを設定
                 SlackChannelsQueryParameter queryParameter = new SlackChannelsQueryParameter()
@@ -189,12 +189,12 @@ namespace dcinc.api
                 ]SlackChannel slackChannel,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            string id = req.RouteValues["id"].ToString();
+            log.LogInformation($"GET slackChannels/{id}");
 
             if (slackChannel == null)
             {
-                string id = req.RouteValues["id"].ToString();
-                return new BadRequestObjectResult($"Target item not found. Id={id}");
+                return new NotFoundObjectResult($"Target item not found. Id={id}");
             }
 
             return new OkObjectResult($"This HTTP triggered function executed successfully.\n{JsonConvert.SerializeObject(slackChannel)}");
@@ -225,14 +225,14 @@ namespace dcinc.api
             try
             {
                 string id = req.RouteValues["id"].ToString();
-                log.LogInformation($"DELETE webMeetings/{id}");
+                log.LogInformation($"DELETE slackChannels/{id}");
 
                 // Slackチャンネル情報を削除
                 var documentItems = await DeleteSlackChannelById(client, id, log);
 
                 if(!documentItems.Any())
                 {
-                    return new BadRequestObjectResult($"Target item not found. Id={id}");
+                    return new NotFoundObjectResult($"Target item not found. Id={id}");
                 }
                 message = JsonConvert.SerializeObject(documentItems);
 

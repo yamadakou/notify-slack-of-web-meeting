@@ -24,7 +24,7 @@ namespace dcinc.jobs
 
         public NotifySlack(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient();
+            _httpClient = httpClientFactory.CreateClient("RetryHttpClient");
         }
 
         // 参考：https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions

@@ -115,7 +115,7 @@
     ```
 
 ####  通知先のSlackチャンネル情報を登録・検索・削除する REST API
-* 通知先のSlackチャンネル情報を登録
+* Slackチャンネル情報を登録
   ```json
   POST api/SlackChannels
   {
@@ -126,7 +126,7 @@
   ```
   * 全ての項目が必須項目となります。
 
-  * レスポンス(登録した通知先のSlackチャンネル情報を返す)
+  * レスポンス(登録したSlackチャンネル情報を返す)
     ```json
     {
       "id": <Slackチャンネル情報ID>
@@ -137,7 +137,7 @@
     }
     ```
 
-* 通知先のSlackチャンネル情報を検索
+* Slackチャンネル情報を検索
   ```js
   GET api/SlackChannels
   ```
@@ -161,28 +161,28 @@
     }]
     ```
 
-* 通知先のSlackチャンネル情報を取得
+* Slackチャンネル情報を取得
   ```json
-  GET api/SlackChannels/{Slackチャンネル情報ID(複数指定時はカンマ区切りで指定)}
+  GET api/SlackChannels/{Slackチャンネル情報ID(単一指定)}
   ```
 
   * レスポンス
     ```json
-    [{
+    {
       "id": <Slackチャンネル情報ID>
       "name": <Slackチャンネル情報名>,
       "webhookUrl": <SlackチャンネルのWebhook URL>,
       "registeredBy": <登録者>,
       "registeredAt": <登録日時>
-    }]
+    }
     ```
 
-* 通知先のSlackチャンネル情報を削除
+* Slackチャンネル情報を削除
   ```json
   DELETE api/SlackChannels/{Slackチャンネル情報ID(複数指定時はカンマ区切りで指定)}
   ```
 
-  * レスポンス(削除したWeb会議情報を返す)
+  * レスポンス(削除したSlackチャンネル情報を返す)
     ```json
     [{
       "id": <Slackチャンネル情報ID>

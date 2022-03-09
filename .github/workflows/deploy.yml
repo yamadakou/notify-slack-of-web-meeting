@@ -3,7 +3,9 @@ name: Deploy DotNet project to function app ( .NET Core CI )
 on:
   workflow_dispatch:
   workflow_call:
-
+    secrets:
+      token:
+        required: false
 env:
   AZURE_WEBAPP_NAME: notify-slack-of-web-meeting-yamadak    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: 'output'      # set this to the path to your web app project, defaults to the repository root

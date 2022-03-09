@@ -40,7 +40,8 @@ namespace dcinc.jobs
                 ]DocumentClient client, ILogger log)
         {
             // 現在日のWeb会議情報を取得する
-            var today = DateTime.UtcNow.Date.ToString("yyy-MM-dd");
+            // ※アプリケーション設定でタイムゾーンを指定するため、ローカルの現在日を取得
+            var today = DateTime.Now.Date.ToString("yyyy-MM-dd");
             var webMeetingsParam = new WebMeetingsQueryParameter {
                 FromDate = today,
                 ToDate = today

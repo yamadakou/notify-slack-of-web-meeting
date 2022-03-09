@@ -37,3 +37,5 @@ jobs:
     - name: Test
       run: dotnet test ${{env.SOURCE_FOLDER}} --no-build --verbosity normal
 
+  call-workflow-deploy-in-local-repo:
+    uses: ./.github/workflows/deploy.yml

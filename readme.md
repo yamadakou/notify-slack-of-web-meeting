@@ -21,7 +21,7 @@
 ### 機能説明
 ####  Web会議情報を登録・検索・削除する REST API
 * Web会議情報を登録
-  ```json
+  ```js
   POST api/WebMeetings
   {
       "name": <Web会議名>,
@@ -37,10 +37,10 @@
   * レスポンス(登録したWeb会議情報を返す)
     ```json
     {
-      "id": <Web会議情報ID>
+      "id": <Web会議情報ID>,
       "name": <Web会議名>,
       "startDateTime": <Web会議の開始日時>,
-      "date": <Web会議の日付(UNIXエポックタイム)>
+      "date": <Web会議の日付(UNIXエポックタイム)>,
       "url": <Web会議のURL>,
       "registeredBy": <登録者>,
       "registeredAt": <登録日時>,
@@ -65,10 +65,10 @@
   * レスポンス
     ```json
     [{
-      "id": <Web会議情報ID>
+      "id": <Web会議情報ID>,
       "name": <Web会議名>,
       "startDateTime": <Web会議の開始日時>,
-      "date": <Web会議の日付(UNIXエポックタイム)>
+      "date": <Web会議の日付(UNIXエポックタイム)>,
       "url": <Web会議のURL>,
       "registeredBy": <登録者>,
       "registeredAt": <登録日時>,
@@ -77,17 +77,17 @@
     ```
 
 * Web会議情報を取得
-  ```json
+  ```js
   GET api/WebMeetings/{Web会議情報ID(複数指定時はカンマ区切りで指定)}
   ```
 
   * レスポンス
     ```json
     [{
-      "id": <Web会議情報ID>
+      "id": <Web会議情報ID>,
       "name": <Web会議名>,
       "startDateTime": <Web会議の開始日時>,
-      "date": <Web会議の日付(UNIXエポックタイム)>
+      "date": <Web会議の日付(UNIXエポックタイム)>,
       "url": <Web会議のURL>,
       "registeredBy": <登録者>,
       "registeredAt": <登録日時>,
@@ -96,17 +96,17 @@
     ```
 
 * Web会議情報を削除
-  ```json
+  ```js
   DELETE api/WebMeetings/{Web会議情報ID(複数指定時はカンマ区切りで指定)}
   ```
 
   * レスポンス(削除したWeb会議情報を返す)
     ```json
     [{
-      "id": <Web会議情報ID>
+      "id": <Web会議情報ID>,
       "name": <Web会議名>,
       "startDateTime": <Web会議の開始日時>,
-      "date": <Web会議の日付(UNIXエポックタイム)>
+      "date": <Web会議の日付(UNIXエポックタイム)>,
       "url": <Web会議のURL>,
       "registeredBy": <登録者>,
       "registeredAt": <登録日時>,
@@ -116,7 +116,7 @@
 
 ####  通知先のSlackチャンネル情報を登録・検索・削除する REST API
 * Slackチャンネル情報を登録
-  ```json
+  ```js
   POST api/SlackChannels
   {
       "name": <Slackチャンネル情報名>,
@@ -129,7 +129,7 @@
   * レスポンス(登録したSlackチャンネル情報を返す)
     ```json
     {
-      "id": <Slackチャンネル情報ID>
+      "id": <Slackチャンネル情報ID>,
       "name": <Slackチャンネル情報名>,
       "webhookUrl": <SlackチャンネルのWebhook URL>,
       "registeredBy": <登録者>,
@@ -153,7 +153,7 @@
   * レスポンス
     ```json
     [{
-      "id": <Slackチャンネル情報ID>
+      "id": <Slackチャンネル情報ID>,
       "name": <Slackチャンネル情報名>,
       "webhookUrl": <SlackチャンネルのWebhook URL>,
       "registeredBy": <登録者>,
@@ -162,14 +162,14 @@
     ```
 
 * Slackチャンネル情報を取得
-  ```json
+  ```js
   GET api/SlackChannels/{Slackチャンネル情報ID(単一指定)}
   ```
 
   * レスポンス
     ```json
     {
-      "id": <Slackチャンネル情報ID>
+      "id": <Slackチャンネル情報ID>,
       "name": <Slackチャンネル情報名>,
       "webhookUrl": <SlackチャンネルのWebhook URL>,
       "registeredBy": <登録者>,
@@ -178,14 +178,14 @@
     ```
 
 * Slackチャンネル情報を削除
-  ```json
+  ```js
   DELETE api/SlackChannels/{Slackチャンネル情報ID(複数指定時はカンマ区切りで指定)}
   ```
 
   * レスポンス(削除したSlackチャンネル情報を返す)
     ```json
     [{
-      "id": <Slackチャンネル情報ID>
+      "id": <Slackチャンネル情報ID>,
       "name": <Slackチャンネル情報名>,
       "webhookUrl": <SlackチャンネルのWebhook URL>,
       "registeredBy": <登録者>,
@@ -204,8 +204,20 @@
 * 翌日のWeb会議情報をWeb会議情報に指定されているSlackチャンネル情報ごとに開始時刻順にソートし、Slackチャンネルに通知します。
 * Slackチャンネルに通知したWeb会議情報は削除します。
 ## 利用方法
+### Azure環境
+Azure Functions と Azure Cosmos DB を利用します。
+* Azure Cosmos DB アカウント
+  * Database
+    * Name: notify-slack-of-web-meeting-db
+  * Container
+    * Web会議情報
+      * Name: WebMeetings
+      * Partition key: /date
+    * Slackチャンネル情報
+      * Name: SlackChannels
+      * Partition key: /id
+
 ### ビルド環境
-Azure Functions と Azure Cosmos DB を利用するため、 Azure のアカウントが必要です。
   * .NET Core 3.1 SDK
     * https://dotnet.microsoft.com/en-us/download/dotnet/3.1
   * Azure Functions Core Tools バージョン 3.x
@@ -222,7 +234,7 @@ Azure Functions と Azure Cosmos DB を利用するため、 Azure のアカウ�
 
 
 ### 依存パッケージ
-※ `dotnet list package`の結果から作成
+※ `dotnet list package` の結果から作成
    |最上位レベル パッケージ|バージョン|Nuget|
    |:--|:--|:--|
    | FluentValidation                                 |10.3.4|https://www.nuget.org/packages/FluentValidation/10.3.4|
@@ -237,4 +249,4 @@ Azure Functions と Azure Cosmos DB を利用するため、 Azure のアカウ�
 
 ## （関連リポジトリ）
 ここのreadmeを参考にする。
-* hhttps://github.com/yamadakou/notify-slack-of-web-meeting.cli
+* https://github.com/yamadakou/notify-slack-of-web-meeting.cli

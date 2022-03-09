@@ -1,7 +1,7 @@
 name: Deploy DotNet project to function app with a Windows environment
 
 on:
-  [push]
+  workflow_call:
 
 env:
   AZURE_FUNCTIONAPP_NAME: notify-slack-of-web-meeting-yamadak  # set this to your application's name

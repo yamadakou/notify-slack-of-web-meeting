@@ -204,9 +204,8 @@
 * 翌日のWeb会議情報をWeb会議情報に指定されているSlackチャンネル情報ごとに開始時刻順にソートし、Slackチャンネルに通知します。
 * Slackチャンネルに通知したWeb会議情報は削除します。
 ## 利用方法
-### 環境
+### ビルド環境
 Azure Functions と Azure Cosmos DB を利用するため、 Azure のアカウントが必要です。
-* ビルド環境
   * .NET Core 3.1 SDK
     * https://dotnet.microsoft.com/en-us/download/dotnet/3.1
   * Azure Functions Core Tools バージョン 3.x
@@ -222,58 +221,20 @@ Azure Functions と Azure Cosmos DB を利用するため、 Azure のアカウ�
 
 
 
-### Install
-Nuget: DensoCreate.XXX
+### 依存パッケージ
+※ `dotnet list package`の結果から作成
+   |最上位レベル パッケージ|バージョン|Nuget|
+   |:--|:--|:--|
+   | FluentValidation                                 |10.3.4|https://www.nuget.org/packages/FluentValidation/10.3.4|
+   | LinqKit.Microsoft.EntityFrameworkCore            |3.1.27|https://www.nuget.org/packages/LinqKit.Microsoft.EntityFrameworkCore/3.1.27|
+   | Microsoft.Azure.Functions.Extensions             |1.1.0 |https://www.nuget.org/packages/Microsoft.Azure.Functions.Extensions/1.1.0|
+   | Microsoft.Azure.WebJobs.Extensions.CosmosDB      |3.0.10|https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.CosmosDB/3.0.10|
+   | Microsoft.Extensions.DependencyInjection         |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/3.1.22|
+   | Microsoft.Extensions.Http                        |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http/3.1.22|
+   | Microsoft.Extensions.Http.Polly                  |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly/3.1.22|
+   | Microsoft.NET.Sdk.Functions                      |3.0.13|https://www.nuget.org/packages/Microsoft.NET.Sdk.Functions/3.0.13|
+   | SourceLink.Copy.PdbFiles                         |2.8.3 |https://www.nuget.org/packages/SourceLink.Copy.PdbFiles/2.8.3|
 
-```
-C:\Project> NuGet Install DensoCreate.XXX
-```
-
-### 例
-
-#### XXする
-```cs
-using DensoCreate.XXX;
-
-// xxする
-var xxx = new xxx();
-
-```
-
-#### YYする
-```cs
-// yyする
-var yy = new xxx();
-
-```
-## サンプル
-（サンプルへのリンクを記載する）
-`samples/...` を参照のこと。
-
-## 公開パッケージ
-* DensoCreate.ProjectName
- 
-## 依存パッケージ
-（複数のパッケージを公開する場合はパッケージごとに記載のこと）
-
-### DensoCreate.XXX
-* DensoCreate.Logging
-
-### DensoCreate.YY
-* なし
-
-## フレームワーク
-（複数のパッケージを公開する場合はパッケージごとに記載のこと）
-
-### DensoCreate.XXX
-* .NET Standard 2.0
-
-### DensoCreate.YY
-* WPF Core 3.1
-
-
-## （参考リポジトリ）
+## （関連リポジトリ）
 ここのreadmeを参考にする。
-* https://github.com/miles-team/DensoCreate.EventAggregator
-* https://github.com/denso-create/LightningReview-ReviewFile
-
+* hhttps://github.com/yamadakou/notify-slack-of-web-meeting.cli

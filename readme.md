@@ -147,7 +147,7 @@
     |:--|:--|:--|
     |ids|Slackチャンネル情報ID|複数指定時はカンマ区切りで指定|
     |name|Slackチャンネル情報名|部分一致
-    |webhookUrl|SlackチャンネルのWebhook URL|部分一致
+    |webhookUrl|SlackチャンネルのWebhook URL|完全一致
     |registeredBy|登録者|完全一致
 
   * レスポンス

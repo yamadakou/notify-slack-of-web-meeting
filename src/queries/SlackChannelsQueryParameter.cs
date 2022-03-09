@@ -92,7 +92,7 @@ namespace dcinc.api.queries
             }
             if (this.HasWebhookUrl)
             {
-                expr = expr.And(s => s.WebhookUrl.Contains(this.WebhookUrl));
+                expr = expr.And(s => s.WebhookUrl == WebhookUrl);
             }
             if (this.HasRegisteredBy)
             {

@@ -23,6 +23,10 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <!--
+     共有フレームワーク内の ASP.NET Core API を使用するため、ASP.NET Core を参照する。
+     参考：https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/target-aspnetcore?view=aspnetcore-3.1&tabs=visual-studio#use-the-aspnet-core-shared-framework
+   -->
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

@@ -194,19 +194,12 @@
     ```
 #### 当日のWeb会議情報を指定の Slack チャンネルに通知する定期バッチ
 * 平日の朝9時に実行
-  * 日本時間で動作させるために Azure Functions のアプリケーション設定に以下を追加しておく。
-
-    |名前|値|
-    |:--|:--|
-    |WEBSITE_TIME_ZONE|Tokyo Standard Time|
-    * 参考
-      * https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-examples
 * 翌日のWeb会議情報をWeb会議情報に指定されているSlackチャンネル情報ごとに開始時刻順にソートし、Slackチャンネルに通知します。
 * Slackチャンネルに通知したWeb会議情報は削除します。
 ## 利用方法
 ### Azure環境
 Azure Functions と Azure Cosmos DB を利用します。
-* Azure Cosmos DB アカウント
+* Azure Cosmos DB アカウントに以下の Database および Container を作成する。
   * Database
     * Name: notify-slack-of-web-meeting-db
   * Container
@@ -216,8 +209,14 @@ Azure Functions と Azure Cosmos DB を利用します。
     * Slackチャンネル情報
       * Name: SlackChannels
       * Partition key: /id
+#### 参考
+  * クイック スタート:Azure portal を使用して Azure Cosmos のアカウント、データベース、コンテナー、および項目を作成する
+    * https://docs.microsoft.com/ja-jp/azure/cosmos-db/sql/create-cosmosdb-resources-portal
+  * Azure Cosmos DB の Free レベル
+    * https://docs.microsoft.com/ja-jp/azure/cosmos-db/free-tier
 
 ### ビルド環境
+Visual Studio Code で、ビルドと Azure Functions への発行ができるよう、以下の環境を整える。
   * .NET Core 3.1 SDK
     * https://dotnet.microsoft.com/en-us/download/dotnet/3.1
   * Azure Functions Core Tools バージョン 3.x
@@ -231,9 +230,30 @@ Azure Functions と Azure Cosmos DB を利用します。
   * Visual Studio Code 用の Azure データベース拡張機能
     * https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-cosmosdb
 
+#### 参考
+  * Visual Studio Code を使用して Azure Functions を開発する
+    * https://docs.microsoft.com/ja-jp/azure/azure-functions/create-first-function-vs-code-csharp?tabs=in-process
 
-
-### 依存パッケージ
+### ビルド＆デプロイ
+1. `gir clone ・・・` などで本プロジェクトをローカルに取得し、 Visual Studio Code で開く。
+2. ビルドできるよう、[依存パッケージ](依存パッケージ)を .NET CLI のコマンド `dotnet add package ・・・` で導入する。
+3. `dotnet build` で、ビルドが成功することを確認する。
+4. 以下の Microsoft Docs を参考に、Azure Cosmos DB への接続情報をアプリの設定に追加する。
+    * 関数アプリの設定を更新する
+      * https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-add-output-binding-cosmos-db-vs-code?pivots=programming-language-csharp&tabs=in-process#update-your-function-app-settings
+5. 以下の Microsoft Docs を参考に、Azure にプロジェクトを発行（デプロイ）する。
+    * Azure にプロジェクトを発行する
+      * https://docs.microsoft.com/ja-jp/azure/azure-functions/create-first-function-vs-code-csharp?tabs=in-process#publish-the-project-to-azure
+6. 日本時間で動作させるために Azure Functions のアプリケーション設定に以下を追加する。
+    |名前|値|
+    |:--|:--|
+    |WEBSITE_TIME_ZONE|Tokyo Standard Time|
+    * 参考
+      * https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-time-zones
+7. クライアントからSlackチャンネル情報やWeb会議情報を登録する。
+    * コンソールアプリ「notify-slack-of-web-meeting.cli」利用する場合は以下のリポジトリを参照
+      * https://github.com/yamadakou/notify-slack-of-web-meeting.cli
+#### 依存パッケージ
 ※ `dotnet list package` の結果から作成
    |最上位レベル パッケージ|バージョン|Nuget|
    |:--|:--|:--|
@@ -247,6 +267,7 @@ Azure Functions と Azure Cosmos DB を利用します。
    | Microsoft.NET.Sdk.Functions                      |3.0.13|https://www.nuget.org/packages/Microsoft.NET.Sdk.Functions/3.0.13|
    | SourceLink.Copy.PdbFiles                         |2.8.3 |https://www.nuget.org/packages/SourceLink.Copy.PdbFiles/2.8.3|
 
+
 ## （関連リポジトリ）
-ここのreadmeを参考にする。
-* https://github.com/yamadakou/notify-slack-of-web-meeting.cli
+* notify-slack-of-web-meeting.cli
+  * https://github.com/yamadakou/notify-slack-of-web-meeting.cli

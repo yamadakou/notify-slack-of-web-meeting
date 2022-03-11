@@ -1,21 +1,21 @@
-# notify-slack-of-web-meeting
+# Notify Slack of web meeting
 
 [![Build](https://github.com/yamadakou/notify-slack-of-web-meeting/actions/workflows/build.yml/badge.svg)](https://github.com/yamadakou/notify-slack-of-web-meeting/workflows/build.yml)
 
-* 当日の Web 会議の情報を Slack に通知するWeb サービスです。
+当日の Web 会議の情報を Slack に通知するWeb サービスです。
 
 ## 概要
 
 ### Notify Slack of web meeting の特徴
 
 * テレワークが増え会議も Web 会議が主流となり、毎日、Web 会議の URL を Outlook から参照する手間が増えました。
-* そこで、今日、予定されている Web 会議を毎朝 Slack で確認できるよう、本サービスでは以下の機能を用意します。
+* そこで、今日、予定されている Web 会議を毎朝 Slack で確認できるよう、本サービスでは以下の機能を提供します。
   * Web会議情報を登録・検索・削除する REST API
   * 通知先のSlackチャンネル情報を登録・検索・削除する REST API
   * 朝9時に当日のWeb会議情報を指定の Slack チャンネルに通知する定期バッチ
 * Web会議情報や通知先の Slack チャンネル情報の登録などは自由にクライアントを用意することで、 Outlook や Google カレンダーなど好みの予定表から Web 会議情報を抽出し、指定した Slack チャンネルに通知することが可能です。
   * Outlook クライアントからログインユーザーの翌日の Web 会議情報を登録するコンソールアプリは下記リポジトリで提供しており、 Windows タスクスケジューラで毎日実行するよう登録することで、自動的に毎朝9時に当日の Web 会議情報を Slack で確認できます。
-    * [notify-slack-of-web-meeting.cli](https://github.com/yamadakou/notify-slack-of-web-meeting.cli)
+    * [Notify Slack of web meeting CLI](https://github.com/yamadakou/notify-slack-of-web-meeting.cli)
       * https://github.com/yamadakou/notify-slack-of-web-meeting.cli
 
 ### 機能説明
@@ -255,19 +255,19 @@ Visual Studio Code で、ビルドと Azure Functions への発行ができる�
       * https://github.com/yamadakou/notify-slack-of-web-meeting.cli
 #### 依存パッケージ
 ※ `dotnet list package` の結果から作成
-   |最上位レベル パッケージ|バージョン|Nuget|
-   |:--|:--|:--|
-   | FluentValidation                                 |10.3.4|https://www.nuget.org/packages/FluentValidation/10.3.4|
-   | LinqKit.Microsoft.EntityFrameworkCore            |3.1.27|https://www.nuget.org/packages/LinqKit.Microsoft.EntityFrameworkCore/3.1.27|
-   | Microsoft.Azure.Functions.Extensions             |1.1.0 |https://www.nuget.org/packages/Microsoft.Azure.Functions.Extensions/1.1.0|
-   | Microsoft.Azure.WebJobs.Extensions.CosmosDB      |3.0.10|https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.CosmosDB/3.0.10|
-   | Microsoft.Extensions.DependencyInjection         |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/3.1.22|
-   | Microsoft.Extensions.Http                        |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http/3.1.22|
-   | Microsoft.Extensions.Http.Polly                  |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly/3.1.22|
-   | Microsoft.NET.Sdk.Functions                      |3.0.13|https://www.nuget.org/packages/Microsoft.NET.Sdk.Functions/3.0.13|
-   | SourceLink.Copy.PdbFiles                         |2.8.3 |https://www.nuget.org/packages/SourceLink.Copy.PdbFiles/2.8.3|
+  |最上位レベル パッケージ|バージョン|Nuget|
+  |:--|:--|:--|
+  | FluentValidation                                 |10.3.4|https://www.nuget.org/packages/FluentValidation/10.3.4|
+  | LinqKit.Microsoft.EntityFrameworkCore            |3.1.27|https://www.nuget.org/packages/LinqKit.Microsoft.EntityFrameworkCore/3.1.27|
+  | Microsoft.Azure.Functions.Extensions             |1.1.0 |https://www.nuget.org/packages/Microsoft.Azure.Functions.Extensions/1.1.0|
+  | Microsoft.Azure.WebJobs.Extensions.CosmosDB      |3.0.10|https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.CosmosDB/3.0.10|
+  | Microsoft.Extensions.DependencyInjection         |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/3.1.22|
+  | Microsoft.Extensions.Http                        |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http/3.1.22|
+  | Microsoft.Extensions.Http.Polly                  |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly/3.1.22|
+  | Microsoft.NET.Sdk.Functions                      |3.0.13|https://www.nuget.org/packages/Microsoft.NET.Sdk.Functions/3.0.13|
+  | SourceLink.Copy.PdbFiles                         |2.8.3 |https://www.nuget.org/packages/SourceLink.Copy.PdbFiles/2.8.3|
 
 
 ## （関連リポジトリ）
-* notify-slack-of-web-meeting.cli
+* Notify Slack of web meeting CLI
   * https://github.com/yamadakou/notify-slack-of-web-meeting.cli

@@ -73,7 +73,7 @@ namespace dcinc.jobs
                 var message = new StringBuilder($"{DateTime.Today.ToString("yyyy/MM/dd")}のWeb会議情報\n");
                 foreach(var webMeeting in webMeetingsBySlackChannelMap[slackChannel.Id])
                 {
-                    message.AppendLine($"{webMeeting.StartDateTime.ToString("HH:mm")}～：{webMeeting.Name}\n\t{webMeeting.Url}");
+                    message.AppendLine($"{webMeeting.StartDateTime.ToString("HH:mm")}～：<{webMeeting.Url}|{webMeeting.Name}>");
                 }
                 log.LogInformation(slackChannel.WebhookUrl);
                 log.LogInformation(message.ToString());

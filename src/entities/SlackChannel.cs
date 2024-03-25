@@ -1,5 +1,5 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace dcinc.api.entities
 {
@@ -20,27 +20,27 @@ namespace dcinc.api.entities
         /// <summary>
         /// 一意とするID
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
         /// <summary>
         /// Slackチャンネル名
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
         /// <summary>
         /// SlackチャンネルのWebhook URL
         /// </summary>
-        [JsonProperty("webhookUrl")]
+        [JsonPropertyName("webhookUrl")]
         public string WebhookUrl { get; set; }
         /// <summary>
         /// 登録者
         /// </summary>
-        [JsonProperty("registeredBy")]
+        [JsonPropertyName("registeredBy")]
         public string RegisteredBy { get; set; }
         /// <summary>
         /// 登録日時（UTC）
         /// </summary>
-        [JsonProperty("registeredAt")]
+        [JsonPropertyName("registeredAt")]
         public DateTime RegisteredAt { get; set; }
 
         #endregion

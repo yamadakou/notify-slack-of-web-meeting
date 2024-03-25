@@ -16,11 +16,14 @@
 * Web会議情報や通知先の Slack チャンネル情報の登録などは自由にクライアントを用意することで、 Outlook や Google カレンダーなど好みの予定表から Web 会議情報を抽出し、指定した Slack チャンネルに通知することが可能です。
   * Outlook クライアントからログインユーザーの翌日の Web 会議情報を登録するコンソールアプリは下記リポジトリで提供しており、 Windows タスクスケジューラで毎日実行するよう登録することで、自動的に毎朝9時に当日の Web 会議情報を Slack で確認できます。
     * [Notify Slack of web meeting CLI](https://github.com/yamadakou/notify-slack-of-web-meeting.cli)
-      * https://github.com/yamadakou/notify-slack-of-web-meeting.cli
+      * <https://github.com/yamadakou/notify-slack-of-web-meeting.cli>
 
 ### 機能説明
-####  Web会議情報を登録・検索・削除する REST API
+
+#### Web会議情報を登録・検索・削除する REST API
+
 * Web会議情報を登録
+
   ```js
   POST api/WebMeetings
   {
@@ -31,10 +34,12 @@
       "slackChannelId": <通知先のSlackチャンネル情報のID>
   }
   ```
+
   * 全ての項目が必須項目となります。
   * `startDateTime` は翌日以降の日時を指定する必要があります。
 
   * レスポンス(登録したWeb会議情報を返す)
+
     ```json
     {
       "id": <Web会議情報ID>,
@@ -49,9 +54,11 @@
     ```
 
 * Web会議情報を検索
+
   ```js
   GET api/WebMeetings
   ```
+
   * クエリパラメータ
   
     |項目|値|備考|
@@ -63,6 +70,7 @@
     |slackChannelId|通知先のSlackチャンネル情報ID|
 
   * レスポンス
+
     ```json
     [{
       "id": <Web会議情報ID>,
@@ -77,11 +85,13 @@
     ```
 
 * Web会議情報を取得
+
   ```js
   GET api/WebMeetings/{Web会議情報ID(複数指定時はカンマ区切りで指定)}
   ```
 
   * レスポンス
+
     ```json
     [{
       "id": <Web会議情報ID>,
@@ -96,11 +106,13 @@
     ```
 
 * Web会議情報を削除
+
   ```js
   DELETE api/WebMeetings/{Web会議情報ID(複数指定時はカンマ区切りで指定)}
   ```
 
   * レスポンス(削除したWeb会議情報を返す)
+
     ```json
     [{
       "id": <Web会議情報ID>,
@@ -114,8 +126,10 @@
     }]
     ```
 
-####  通知先のSlackチャンネル情報を登録・検索・削除する REST API
+#### 通知先のSlackチャンネル情報を登録・検索・削除する REST API
+
 * Slackチャンネル情報を登録
+
   ```js
   POST api/SlackChannels
   {
@@ -124,9 +138,11 @@
       "registeredBy": <登録者>
   }
   ```
+
   * 全ての項目が必須項目となります。
 
   * レスポンス(登録したSlackチャンネル情報を返す)
+
     ```json
     {
       "id": <Slackチャンネル情報ID>,
@@ -138,9 +154,11 @@
     ```
 
 * Slackチャンネル情報を検索
+
   ```js
   GET api/SlackChannels
   ```
+
   * クエリパラメータ
   
     |項目|値|備考|
@@ -151,6 +169,7 @@
     |registeredBy|登録者|完全一致
 
   * レスポンス
+
     ```json
     [{
       "id": <Slackチャンネル情報ID>,
@@ -162,11 +181,13 @@
     ```
 
 * Slackチャンネル情報を取得
+
   ```js
   GET api/SlackChannels/{Slackチャンネル情報ID(単一指定)}
   ```
 
   * レスポンス
+
     ```json
     {
       "id": <Slackチャンネル情報ID>,
@@ -178,11 +199,13 @@
     ```
 
 * Slackチャンネル情報を削除
+
   ```js
   DELETE api/SlackChannels/{Slackチャンネル情報ID(複数指定時はカンマ区切りで指定)}
   ```
 
   * レスポンス(削除したSlackチャンネル情報を返す)
+
     ```json
     [{
       "id": <Slackチャンネル情報ID>,
@@ -192,13 +215,19 @@
       "registeredAt": <登録日時>
     }]
     ```
+
 #### 当日のWeb会議情報を指定の Slack チャンネルに通知する定期バッチ
+
 * 平日の朝9時に実行
 * 翌日のWeb会議情報をWeb会議情報に指定されているSlackチャンネル情報ごとに開始時刻順にソートし、Slackチャンネルに通知します。
 * Slackチャンネルに通知したWeb会議情報は削除します。
+
 ## 利用方法
+
 ### Azure環境
+
 Azure Functions と Azure Cosmos DB を利用します。
+
 * Azure Cosmos DB アカウントに以下の Database および Container を作成する。
   * Database
     * Name: notify-slack-of-web-meeting-db
@@ -209,65 +238,72 @@ Azure Functions と Azure Cosmos DB を利用します。
     * Slackチャンネル情報
       * Name: SlackChannels
       * Partition key: /id
+
 #### 参考
-  * クイック スタート:Azure portal を使用して Azure Cosmos のアカウント、データベース、コンテナー、および項目を作成する
-    * https://docs.microsoft.com/ja-jp/azure/cosmos-db/sql/create-cosmosdb-resources-portal
-  * Azure Cosmos DB の Free レベル
-    * https://docs.microsoft.com/ja-jp/azure/cosmos-db/free-tier
+
+* クイック スタート:Azure portal を使用して Azure Cosmos のアカウント、データベース、コンテナー、および項目を作成する
+  * <https://docs.microsoft.com/ja-jp/azure/cosmos-db/sql/create-cosmosdb-resources-portal>
+* Azure Cosmos DB の Free レベル
+  * <https://docs.microsoft.com/ja-jp/azure/cosmos-db/free-tier>
 
 ### ビルド環境
-Visual Studio Code で、ビルドと Azure Functions への発行ができるよう、以下の環境を整える。
-  * .NET Core 3.1 SDK
-    * https://dotnet.microsoft.com/en-us/download/dotnet/3.1
-  * Azure Functions Core Tools バージョン 3.x
-    * https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-run-local?tabs=v3%2Cwindows%2Ccsharp%2Cportal%2Cbash#install-the-azure-functions-core-tools
-  * Visual Studio Code
-    * https://code.visualstudio.com/
-  * Visual Studio Code 用の C# 拡張機能
-    * https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp
-  * Visual Studio Code 用 Azure Functions 拡張機能
-    * https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions
-  * Visual Studio Code 用の Azure データベース拡張機能
-    * https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-cosmosdb
+
+Visual Studio 2022 で、ビルドと Azure Functions への発行ができるよう、以下の環境を整える。
+
+* Visual Studio 2022
+  * Azure 開発ワークロードをインストール
+  * .NET 8 に対応した 17.8 以降のバージョン（17.9.3 で動作確認しています）
+  * <https://learn.microsoft.com/ja-jp/dotnet/azure/configure-visual-studio>
 
 #### 参考
-  * Visual Studio Code を使用して Azure Functions を開発する
-    * https://docs.microsoft.com/ja-jp/azure/azure-functions/create-first-function-vs-code-csharp?tabs=in-process
+
+* Visual Studio を使用する Azure Functions の開発（分離ワーカーモデル）
+  * <https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-develop-vs?pivots=isolated>
 
 ### ビルド＆デプロイ
-1. `gir clone ・・・` などで本プロジェクトをローカルに取得し、 Visual Studio Code で開く。
-2. ビルドできるよう、[依存パッケージ](依存パッケージ)を .NET CLI のコマンド `dotnet add package ・・・` で導入する。
-3. `dotnet build` で、ビルドが成功することを確認する。
+
+1. `gir clone ・・・` などで本プロジェクトをローカルに取得し、 ソリューションファイル「notify-slack-of-web-meeting.sln」を Visual Studio で開く。
+2. ビルドできるよう、Visual Studio のパッケージの復元オプションでを構成し、自動復元を有効にする。
+   * <https://learn.microsoft.com/ja-jp/nuget/consume-packages/package-restore#restore-packages-in-visual-studio>
+3. ソリューションを選択した状態で [ソリューションのリビルド]を実行し、ビルドが成功することを確認する。
 4. 以下の Microsoft Docs を参考に、Azure Cosmos DB への接続情報をアプリの設定に追加する。
     * 関数アプリの設定を更新する
-      * https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-add-output-binding-cosmos-db-vs-code?pivots=programming-language-csharp&tabs=in-process#update-your-function-app-settings
+      * <https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-add-output-binding-cosmos-db-vs-code?pivots=programming-language-csharp&tabs=in-process#update-your-function-app-settings>
 5. 以下の Microsoft Docs を参考に、Azure にプロジェクトを発行（デプロイ）する。
     * Azure にプロジェクトを発行する
-      * https://docs.microsoft.com/ja-jp/azure/azure-functions/create-first-function-vs-code-csharp?tabs=in-process#publish-the-project-to-azure
+      * <https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-create-your-first-function-visual-studio#publish-the-project-to-azure>
 6. 日本時間で動作させるために Azure Functions のアプリケーション設定に以下を追加する。
     |名前|値|
     |:--|:--|
     |WEBSITE_TIME_ZONE|Tokyo Standard Time|
     * 参考
-      * https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-time-zones
+      * <https://docs.microsoft.com/ja-jp/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-time-zones>
 7. クライアントからSlackチャンネル情報やWeb会議情報を登録する。
     * コンソールアプリ「notify-slack-of-web-meeting.cli」利用する場合は以下のリポジトリを参照
-      * https://github.com/yamadakou/notify-slack-of-web-meeting.cli
-#### 依存パッケージ
-※ `dotnet list package` の結果から作成
-  |最上位レベル パッケージ|バージョン|Nuget|
-  |:--|:--|:--|
-  | FluentValidation                                 |10.3.4|https://www.nuget.org/packages/FluentValidation/10.3.4|
-  | LinqKit.Microsoft.EntityFrameworkCore            |3.1.27|https://www.nuget.org/packages/LinqKit.Microsoft.EntityFrameworkCore/3.1.27|
-  | Microsoft.Azure.Functions.Extensions             |1.1.0 |https://www.nuget.org/packages/Microsoft.Azure.Functions.Extensions/1.1.0|
-  | Microsoft.Azure.WebJobs.Extensions.CosmosDB      |3.0.10|https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.CosmosDB/3.0.10|
-  | Microsoft.Extensions.DependencyInjection         |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/3.1.22|
-  | Microsoft.Extensions.Http                        |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http/3.1.22|
-  | Microsoft.Extensions.Http.Polly                  |3.1.22|https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly/3.1.22|
-  | Microsoft.NET.Sdk.Functions                      |3.0.13|https://www.nuget.org/packages/Microsoft.NET.Sdk.Functions/3.0.13|
-  | SourceLink.Copy.PdbFiles                         |2.8.3 |https://www.nuget.org/packages/SourceLink.Copy.PdbFiles/2.8.3|
+      * <https://github.com/yamadakou/notify-slack-of-web-meeting.cli>
 
+#### 依存パッケージ
+
+※ `dotnet list package` の結果から作成
+  | 最上位レベル パッケージ | バージョン |
+  |:--|:--|
+  | Azure.Identity | 1.10.4 |
+  | FluentValidation | 11.9.0 |
+  | LinqKit.Microsoft.EntityFrameworkCore | 8.1.5 |
+  | Microsoft.ApplicationInsights.WorkerService | 2.22.0 |
+  | Microsoft.Azure.Functions.Extensions | 1.1.0 |
+  | Microsoft.Azure.Functions.Worker | 1.21.0 |
+  | Microsoft.Azure.Functions.Worker.ApplicationInsights | 1.2.0 |
+  | Microsoft.Azure.Functions.Worker.Extensions.CosmosDB | 4.7.0 |
+  | Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore | 1.2.1 |
+  | Microsoft.Azure.Functions.Worker.Extensions.Timer | 4.3.0 |
+  | Microsoft.Azure.Functions.Worker.Sdk | 1.16.4 |
+  | Microsoft.Extensions.DependencyInjection | 8.0.0 |
+  | Microsoft.Extensions.Http | 8.0.0 |
+  | Microsoft.Extensions.Http.Polly | 8.0.3 |
+  | SourceLink.Copy.PdbFiles | 2.8.3 |
 
 ## （関連リポジトリ）
+
 * Notify Slack of web meeting CLI
-  * https://github.com/yamadakou/notify-slack-of-web-meeting.cli
+  * <https://github.com/yamadakou/notify-slack-of-web-meeting.cli>

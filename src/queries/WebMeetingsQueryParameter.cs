@@ -4,6 +4,8 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using LinqKit;
 using dcinc.api.entities;
+using dcinc.json.converters;
+using System.Text;
 
 namespace dcinc.api.queries
 {
@@ -100,12 +102,24 @@ namespace dcinc.api.queries
         }
 
         /// <summary>
-        /// Web会議の日付範囲の開始日(未指定の場合はUNIXエポック)
+        /// Web会議の日付範囲のUTC開始日(未指定の場合はUNIXエポック)
         /// ※UNIXエポック：1970-01-01 00:00:00.0000000 UTC
         /// </summary>
         public DateTime FromDateUtcValue {
             get {
-                return HasFromDate ? m_fromDate.Value.Date.ToUniversalTime() : DateTime.UnixEpoch;
+                return HasFromDate ? m_fromDate.Value.ToUniversalTime().Date : DateTime.UnixEpoch;
+            }
+        }
+
+        /// <summary>
+        /// Web会議の日付範囲の開始日(未指定の場合はUNIXエポック)
+        /// ※UNIXエポック：1970-01-01 00:00:00.0000000 UTC
+        /// </summary>
+        public DateTime FromDateValue
+        {
+            get
+            {
+                return HasFromDate ? m_fromDate.Value.Date : DateTime.UnixEpoch;
             }
         }
 
@@ -119,11 +133,22 @@ namespace dcinc.api.queries
         }
 
         /// <summary>
-        /// Web会議の日付範囲の開始日(未指定の場合はDateTimeの最大値)
+        /// Web会議の日付範囲のUTC開始日(未指定の場合はDateTimeの最大値)
         /// </summary>
         public DateTime ToDateUtcValue {
             get {
-                return HasToDate ? m_toDate.Value.Date.ToUniversalTime().AddDays(1).AddMilliseconds(-1) : DateTime.MaxValue;
+                return HasToDate ? m_toDate.Value.ToUniversalTime().Date.AddDays(1).AddMilliseconds(-1) : DateTime.MaxValue;
+            }
+        }
+
+        /// <summary>
+        /// Web会議の日付範囲の開始日(未指定の場合はDateTimeの最大値)
+        /// </summary>
+        public DateTime ToDateValue
+        {
+            get
+            {
+                return HasToDate ? m_toDate.Value.Date.AddDays(1).AddMilliseconds(-1) : DateTime.MaxValue;
             }
         }
 
@@ -167,11 +192,11 @@ namespace dcinc.api.queries
             }
             if (this.HasFromDate)
             {
-                expr = expr.And(w => this.FromDateUtcValue <= w.Date);
+                expr = expr.And(w => this.FromDateValue <= w.StartDateTime);
             }
             if (this.HasToDate)
             {
-                expr = expr.And(w => w.Date <= this.ToDateUtcValue);
+                expr = expr.And(w => w.StartDateTime <= this.ToDateValue);
             }
             if (this.HasIds)
             {
@@ -183,6 +208,38 @@ namespace dcinc.api.queries
             }
 
             return expr;
+        }
+
+        /// <summary>
+        /// パラメータに指定された項目を{Key=Value}形式のカンマ区切りで結合する
+        /// </summary>
+        /// <returns>パラメータに指定された項目を{Key=Value}形式のカンマ区切りで結合した文字列</returns>
+        public string ToStringParamaters()
+        {
+            // パラメータに指定された項目を{Key=Value}形式のカンマ区切りで結合する。
+            var stringParamaters = new List<string>();
+            if (this.HasRegisteredBy)
+            {
+                stringParamaters.Add($"[RegisteredBy={this.RegisteredBy}]");
+            }
+            if (this.HasSlackChannelId)
+            {
+                stringParamaters.Add($"[SlackChannelId={this.SlackChannelId}]");
+            }
+            if (this.HasFromDate)
+            {
+                stringParamaters.Add($"[FromDate={this.FromDate}([FromDateValue={this.FromDateValue}])]");
+            }
+            if (this.HasToDate)
+            {
+                stringParamaters.Add($"[ToDate={this.ToDate}([ToDateValue={this.ToDateValue}])]");
+            }
+            if (this.HasIds)
+            {
+                stringParamaters.Append($"[Ids={this.Ids}]([IdValues={this.IdValues}])");
+            }
+
+            return string.Join(',', stringParamaters);
         }
         #endregion
     }

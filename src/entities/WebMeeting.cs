@@ -1,5 +1,6 @@
+using Google.Protobuf.WellKnownTypes;
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace dcinc.api.entities
 {
@@ -20,51 +21,45 @@ namespace dcinc.api.entities
         /// <summary>
         /// 一意とするID
         /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("id")]
+         public string Id { get; set; }
         /// <summary>
         /// Web会議名
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
         /// <summary>
         /// Web会議の開始日時
         /// </summary>
-        [JsonProperty("startDateTime")]
+        [JsonPropertyName("startDateTime")]
         public DateTime StartDateTime { get; set; }
         /// <summary>
         /// Web会議の日付
         /// </summary>
-        [JsonProperty("date")]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.UnixDateTimeConverter))]
+        [JsonPropertyName("date")]
+        [JsonConverter(typeof(dcinc.json.converters.UnixEpochDateTimeConverter))]
         public DateTime Date => StartDateTime.Date.ToUniversalTime();
         /// <summary>
         /// Web会議のURL
         /// </summary>
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
         /// <summary>
         /// 登録者
         /// </summary>
-        [JsonProperty("registeredBy")]
+        [JsonPropertyName("registeredBy")]
         public string RegisteredBy { get; set; }
         /// <summary>
         /// 登録日時（UTC）
         /// </summary>
-        [JsonProperty("registeredAt")]
+        [JsonPropertyName("registeredAt")]
         public DateTime RegisteredAt { get; set; }
         /// <summary>
         /// 通知先のSlackチャンネル
         /// </summary>
-        [JsonProperty("slackChannelId")]
+        [JsonPropertyName("slackChannelId")]
         public string SlackChannelId { get; set; }
 
-        /// <summary>
-        /// Web会議の日付（Unix 時刻（秒））
-        /// </summary>
-        /// <returns>1970-01-01T00:00:00Z からの経過時間（秒）</returns>
-        [JsonIgnore]
-        public long DateUnixTimeSeconds => new DateTimeOffset(Date).ToUnixTimeSeconds();
         #endregion
     }
 }

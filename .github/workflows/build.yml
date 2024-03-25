@@ -15,7 +15,7 @@ env:
   SOURCE_FOLDER: src
   AZURE_WEBAPP_NAME: notify-slack-of-web-meeting-yamadakoji    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: 'output'      # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '3.1.x'           # set this to the dot net version to use
+  DOTNET_VERSION: '8.0.x'           # set this to the dot net version to use
   
 jobs:
   build:
